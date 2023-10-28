@@ -123,7 +123,7 @@ function RegList() {
         });
         alert("Student CheckedIn successfully");
       } catch (error) {
-        alert("Sorry, try again!");
+        
       }
 
       const student = zone ? filterZoneRegStudent(RegStudent, zoneRegList)[index] : filterRegStudents(RegStudent, regStudents)[index];
@@ -248,9 +248,9 @@ function RegList() {
 
         <div className='flex items-center justify-between w-11/12 mx-auto mt-3 text-xs'>
           <h1 className='rounded-lg mx-auto w-5/12 '
-            style={{ backgroundImage: 'url(dist/assets/countbg.png)', backgroundSize: 'cover', backgroundPosition: 'center', padding: '20px' }}>Total Registration <br /><p className='text-center text-xl text-white font-bold shadow-lg rounded-sm'>{totalRegCount}</p> </h1>
+            style={{ backgroundImage: 'url(dist/countbg.png)', backgroundSize: 'cover', backgroundPosition: 'center', padding: '20px' }}>Total Registration <br /><p className='text-center text-xl text-white font-bold shadow-lg rounded-sm'>{totalRegCount}</p> </h1>
           <h1 className='rounded-lg mx-auto w-5/12'
-            style={{ backgroundImage: 'url(dist/assets/countbg.png)', backgroundSize: 'cover', backgroundPosition: 'center', padding: '20px' }}><strong>{zone ? zone : 'Zone'}</strong> Registration <br /> <p className='text-center text-xl text-white font-bold shadow-lg rounded-sm'>{zonRegCount}</p> </h1>
+            style={{ backgroundImage: 'url(dist/countbg.png)', backgroundSize: 'cover', backgroundPosition: 'center', padding: '20px' }}><strong>{zone ? zone : 'Zone'}</strong> Registration <br /> <p className='text-center text-xl text-white font-bold shadow-lg rounded-sm'>{zonRegCount}</p> </h1>
         </div>
 
         <div className='flex pt-5'>

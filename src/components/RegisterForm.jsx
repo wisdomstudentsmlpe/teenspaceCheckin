@@ -99,7 +99,7 @@ function RegisterForm() {
 
                 <div>
                     <h1 className='text-[25px] font-bold font-serif text-center py-1 px-14 md:w-[400px] md:h-[100px] md:mx-auto text-blue-900'
-                        style={{ backgroundImage: 'url(src/assets/regbg.png)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundPositionX: '30px' }}>
+                        style={{ backgroundImage: 'url(dist/regbg.png)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundPositionX: '30px' }}>
                         Secure Your Spot!</h1>
                 </div>
 

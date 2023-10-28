@@ -51,7 +51,7 @@ function Login() {
       <div className='h-screen px-3 bg-gradient-to-bl from-cyan-400 to-pink-600 flex items-center'>
 
         <div className='sm:mx-auto sm:text-center h-[600px] sm:h-auto'
-          style={{ backgroundImage: 'url(dist/assets/login-bg.png)', backgroundSize: 'cover', backgroundPosition: 'center', }}>
+          style={{ backgroundImage: 'url(dist/login-bg.png)', backgroundSize: 'cover', backgroundPosition: 'center', }}>
           <div className='mt-24 sm:mt-5'>
             <p className='text-2xl font-bold text-center'
             >Admin Login</p>
