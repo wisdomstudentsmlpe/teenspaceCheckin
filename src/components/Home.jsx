@@ -32,10 +32,10 @@ function Home() {
             <div className='custom-bg-image h-screen sm:h-auto md:h-screen flex items-center bg-gradient-to-bl from-cyan-400 to-pink-600 sm:pb-20 sm:pt-3'>
                 <div>
                     <div className='flex sm:w-6/12 mx-auto mb-10 sm:mb-5 justify-center bg-slate-50 bg-opacity-50 py-5'>
-                        <img className='w-5/12 border-r pr-4' src="src/assets/students_logo.png" alt="" />
-                        <img className='w-4/12 ' src="src/assets/girls-logo.png" alt="" />
+                        <img className='w-5/12 border-r pr-4' src="dist/assets/students_logo.png" alt="" />
+                        <img className='w-4/12 ' src="dist/assets/girls-logo.png" alt="" />
                     </div>
-                    <img className='w-8/12 sm:w-5/12 mx-auto my-auto' src="src/assets/logo.png" alt="" />
+                    <img className='w-8/12 sm:w-5/12 mx-auto my-auto' src="dist/assets/logo.png" alt="" />
 
                     <div className='mx-auto flex justify-between my-10 sm:my-5 text-center'>
                         <div className='mx-auto rounded-lg bg-slate-100 m-1 p-2 w-[40%]'>
