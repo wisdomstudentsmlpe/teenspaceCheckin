@@ -31,13 +31,13 @@ function Home() {
         <>
             <div className='custom-bg-image h-screen sm:h-auto md:h-screen flex items-center bg-gradient-to-bl from-cyan-400 to-pink-600 sm:pb-20 sm:pt-3'>
                 <div>
-                    <div className='flex sm:w-6/12 mx-auto mb-10 sm:mb-5 justify-center bg-slate-50 bg-opacity-50 py-5'>
+                    <div className='flex sm:w-6/12 mx-auto mb-5 sm:mb-5 justify-center bg-slate-50 bg-opacity-50 py-5'>
                         <img className='w-5/12 border-r pr-4' src="/students_logo.png" alt="" />
                         <img className='w-4/12 ' src="/girls-logo.png" alt="" />
                     </div>
                     <img className='w-8/12 sm:w-5/12 mx-auto my-auto' src="/logo.png" alt="" />
 
-                    <div className='mx-auto flex justify-between my-10 sm:my-5 text-center'>
+                    <div className='mx-auto flex justify-between my-5 sm:my-5 text-center'>
                         <div className='mx-auto rounded-lg bg-slate-100 m-1 p-2 w-[40%]'>
                             <h1 className='font-bold text-teal-700'>Total Registraion</h1><p className='text-white font-medium rounded-full bg-red-600 w-fit px-4 py-2 mx-auto my-1'>{totalRegStudents}</p>
                         </div>
@@ -46,7 +46,7 @@ function Home() {
                         </div>
                     </div>
 
-                    <div className='text-center justify-between'>
+                    <div className='text-center justify-between pb-[25px]'>
                         <Button
 
                             onClick={() => { navigate('/regForm') }}
