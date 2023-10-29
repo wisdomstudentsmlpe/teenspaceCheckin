@@ -270,7 +270,7 @@ function RegList() {
                     key={student.id}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
-                    <TableCell component="th" scope="row">{student.name}<br />{student.parentsNumber}</TableCell>
+                    <TableCell component="th" scope="row">{student.name}<br />{student.parentsNumber} <br /> {student.phoneNumber}</TableCell>
                     <TableCell align="right">
                       <Checkbox
                         color="success"
