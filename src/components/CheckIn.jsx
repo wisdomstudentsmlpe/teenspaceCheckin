@@ -16,6 +16,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
+import { useTheme } from '@mui/material/styles';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -27,14 +28,14 @@ const Search = styled('div')(({ theme }) => ({
     color: 'white',
     border: '1px solid #ffff',
   },
-  width: '95%',
+  width: '90%',
   [theme.breakpoints.up('sm')]: {
-    marginLeft: '0%',
-    width: '65%',
+    marginLeft: 'auto',
+    width: '90%',
   },
   [theme.breakpoints.up('md')]: {
-    marginLeft: '0%',
-    width: '100%',
+    marginLeft: 'auto',
+    width: '80%',
   },
 }));
 
@@ -70,6 +71,7 @@ function CheckIn() {
   const totalRegStudent = regStudents.length;
   const totalCheckInCount = (totalRegStudent) - (regStudents.filter((student) => !student.checked).length);
 
+  const theme = useTheme();
   //search section---------------------------
 
   const [zone, setZone] = useState('');
@@ -99,10 +101,18 @@ function CheckIn() {
 
   return (
     <>
-      <div className='h-screen bg-gradient-to-bl from-cyan-400 to-pink-600 overflow-y-auto'>
-
-        <div className='pt-5'>
-          <FormControl required sx={{ m: 1, minWidth: '95%' }} size="small">
+      <div className='h-screen bg-gradient-to-bl from-cyan-400 to-pink-600 md:flex md:my-auto overflow-y-auto pb-[25%] py-[5%] md:py-20 md:pb-[10%]'>
+        <div className='w-full md:w-6/12 flex items-center justify-center flex-col md:p-5 md:border-r-2'>
+          <FormControl required
+            sx={{
+              m: 1,
+              width: '90%',
+              [`@media (min-width: ${theme.breakpoints.values.md}px)`]: {
+                width: '80%',
+              },
+              marginBottom: '20px',
+            }}
+            size="small">
             <InputLabel sx={{ color: 'white' }} id="zonelabel">Zone</InputLabel>
             <Select
               labelId="zonelabel"
@@ -141,34 +151,37 @@ function CheckIn() {
               <MenuItem value={"Moothedam"}>Moothedam</MenuItem>
             </Select>
           </FormControl>
+
+
+          <Search className='mx-auto'>
+            <SearchIconWrapper>
+              <SearchIcon />
+            </SearchIconWrapper>
+            <StyledInputBase
+              placeholder="Search"
+              inputProps={{ 'aria-label': 'search' }}
+              onChange={(e) => setZoneCheckInStudent(e.target.value)}
+            />
+          </Search>
+
+          <div className='flex items-center justify-between w-11/12 mx-auto mt-3 text-xs'>
+            <h1 className='rounded-lg mx-auto w-5/12 '
+              style={{ backgroundImage: 'url(images/countbg.png)', backgroundSize: 'cover', backgroundPosition: 'center', padding: '20px' }}>Total Check In <br /><p className='text-center text-xl text-white font-bold shadow-lg rounded-sm'>{totalCheckInCount}</p> </h1>
+            <h1 className='rounded-lg mx-auto w-5/12'
+              style={{ backgroundImage: 'url(images/countbg.png)', backgroundSize: 'cover', backgroundPosition: 'center', padding: '20px' }}><strong>{zone ? zone : 'Zone'}</strong> Check In <br /> <p className='text-center text-xl text-white font-bold shadow-lg rounded-sm'>{zoneCheckInCount}</p> </h1>
+          </div>
+
         </div>
 
-        <Search className='mx-auto'>
-          <SearchIconWrapper>
-            <SearchIcon />
-          </SearchIconWrapper>
-          <StyledInputBase
-            placeholder="Search"
-            inputProps={{ 'aria-label': 'search' }}
-            onChange={(e) => setZoneCheckInStudent(e.target.value)}
-          />
-        </Search>
-
-        <div className='flex items-center justify-between w-12/12 mx-auto mt-3 text-xs'>
-          <h1 className='rounded-lg mx-auto w-5/12 '
-            style={{ backgroundImage: 'url(/countbg.png)', backgroundSize: 'cover', backgroundPosition: 'center', padding: '20px' }}>Total Checked In <br /><p className='text-center text-xl text-white font-bold shadow-lg rounded-sm'>{totalCheckInCount}</p> </h1>
-          <h1 className='rounded-lg mx-auto w-5/12'
-            style={{ backgroundImage: 'url(/countbg.png)', backgroundSize: 'cover', backgroundPosition: 'center', padding: '20px' }}><strong>{zone? zone: 'Zone'}</strong> Checked In <br /><p className='text-center text-xl text-white font-bold shadow-lg rounded-sm'>{zoneCheckInCount}</p> </h1>
-        </div>
-
-        <div className='flex pt-5'>
-          <TableContainer component={Paper} className='mx-2 max-h-[400px] overflow-y-auto'>
+        <div className='w-full md:w-6/12 flex pt-5 my-auto md:p-10'>
+          <TableContainer component={Paper}
+            className='mx-2 max-h-[400px] md:max-h-[600px] overflow-y-auto'>
             <Table size="small" aria-label="registered students">
 
               <TableHead>
                 <TableRow>
                   <TableCell sx={{ padding: '15px' }}>Registered</TableCell>
-                  <TableCell align="right">CheckIn</TableCell>
+                  <TableCell align="center">CheckIn</TableCell>
                 </TableRow>
               </TableHead>
 

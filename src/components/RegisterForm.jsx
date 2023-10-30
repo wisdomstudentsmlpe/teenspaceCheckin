@@ -93,7 +93,7 @@ function RegisterForm() {
     };
 
     return (
-        <div className='px-3 bg-gradient-to-bl from-cyan-400 to-pink-600 '>
+        <div className='px-3 bg-gradient-to-bl from-cyan-400 to-pink-600 py-[5%]'>
 
             <div className='md:w-6/12 md:pt-20'>
 

@@ -25,7 +25,7 @@ function App() {
 
     })
 
-    // firebase.firestore().collection('test').get().then((snapshot) => {
+    // firebase.firestore().collection('teenspace23_registered_students').get().then((snapshot) => {
     //   const allRegStudents = snapshot.docs.map((regStudent) => {
     //     return {
     //       ...regStudent.data(),

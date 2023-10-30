@@ -17,6 +17,7 @@ import Select from '@mui/material/Select';
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
 import Checkbox from '@mui/material/Checkbox';
+import { useTheme } from '@mui/material/styles';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -28,14 +29,14 @@ const Search = styled('div')(({ theme }) => ({
     color: 'white',
     border: '1px solid #ffff',
   },
-  width: '95%',
+  width: '90%',
   [theme.breakpoints.up('sm')]: {
     marginLeft: '0%',
-    width: '65%',
+    width: '90%',
   },
   [theme.breakpoints.up('md')]: {
-    marginLeft: '0%',
-    width: '100%',
+    marginLeft: 'auto',
+    width: '80%',
   },
 }));
 
@@ -71,10 +72,13 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 function RegList() {
 
+  const { setRegStudents } = useContext(RegStudentsContext)
+
   const { firebase } = useContext(FirebaseContext);
   const { regStudents } = useContext(RegStudentsContext);
 
   const totalRegCount = regStudents.length;
+  const theme = useTheme();
 
   //search section---------------------------
 
@@ -109,79 +113,98 @@ function RegList() {
   }
 
   //----------------------------------------------
-  const [checkedList, setCheckedList] = useState(regStudents.map(student => student.checked));
+  const [checkedList, setCheckedList] = useState(regStudents.map(student => ({ id: student.studentId, checked: !!student.checked })));
 
   const handleCheckin = async (event, studentId, index) => {
     const newCheckedList = [...checkedList];
     newCheckedList[index] = event.target.checked;
     setCheckedList(newCheckedList);
+    console.log(newCheckedList);
+
+    fetch('https://script.google.com/macros/s/AKfycbzXspfj1-Ixhm8RW6va0tU_0uCbUMAw0TNgG3Y7WKKP19unOhnOpnmuAEKrdEC6gYU/exec')
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+      setRegStudents(data);
+    })
+    .catch(error => console.error('Error:', error));
 
     if (newCheckedList[index]) {
       try {
-        await firebase.firestore().collection('test').doc(studentId).update({
-          checked: true
-        });
-        alert("Student CheckedIn successfully");
+        // await firebase.firestore().collection('test').doc(studentId).update({
+        //   checked: true
+        // });
+        // alert("Student CheckedIn successfully in Firebase");
+
+        const student = zone ? filterZoneRegStudent(RegStudent, zoneRegList)[index] : filterRegStudents(RegStudent, regStudents)[index];
+
+        // Include the checked status in the student data
+        const sheetData = {
+          name: student.name,
+          gender: student.gender,
+          place: student.place,
+          school: student.school,
+          class: student.class,
+          phoneNumber: student.phoneNumber,
+          parentsNumber: student.parentsNumber,
+          zone: student.zone,
+          checked: true, // Set checked status to true when checked in
+        };
+
+        // Make a POST request to update Google Sheets
+        try {
+          await fetch('https://script.google.com/macros/s/AKfycbzXspfj1-Ixhm8RW6va0tU_0uCbUMAw0TNgG3Y7WKKP19unOhnOpnmuAEKrdEC6gYU/exec', {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(sheetData),
+          });
+          alert("Student CheckedIn successfully in Google Sheets");
+        } catch (error) {
+          console.error(error);
+          alert('Error updating Google Sheets. Please retry.');
+        }
       } catch (error) {
-        
-      }
-
-      const student = zone ? filterZoneRegStudent(RegStudent, zoneRegList)[index] : filterRegStudents(RegStudent, regStudents)[index];
-
-      // Include the checked status in the student data
-      const sheetData = {
-        name: student.name,
-        gender: student.gender,
-        place: student.place,
-        school: student.school,
-        class: student.class,
-        phoneNumber: student.phoneNumber,
-        parentsNumber: student.parentsNumber,
-        zone: student.zone,
-        checked: true, // Set checked status to true when checked in
-      };
-
-      // Make a POST request to update Google Sheets
-      try {
-        await fetch('https://script.google.com/macros/s/AKfycbzXspfj1-Ixhm8RW6va0tU_0uCbUMAw0TNgG3Y7WKKP19unOhnOpnmuAEKrdEC6gYU/exec', {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(sheetData),
-        });
-      } catch (error) {
-        alert('Error updating Google Sheets. Please retry.');
         console.error(error);
       }
     } else {
-      // Include the checked status in the student data
-      const student = zone ? filterZoneRegStudent(RegStudent, zoneRegList)[index] : filterRegStudents(RegStudent, regStudents)[index];
-      const sheetData = {
-        name: student.name,
-        gender: student.gender,
-        place: student.place,
-        school: student.school,
-        class: student.class,
-        phoneNumber: student.phoneNumber,
-        parentsNumber: student.parentsNumber,
-        zone: student.zone,
-        checked: false, // Set checked status to false when not checked in
-      };
-
-      // Make a POST request to update Google Sheets
       try {
-        await fetch('https://script.google.com/macros/s/AKfycbzXspfj1-Ixhm8RW6va0tU_0uCbUMAw0TNgG3Y7WKKP19unOhnOpnmuAEKrdEC6gYU/exec', {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(sheetData),
+        await firebase.firestore().collection('test').doc(studentId).update({
+          checked: false
         });
+        alert("Student CheckedOut successfully in Firebase");
+
+        const student = zone ? filterZoneRegStudent(RegStudent, zoneRegList)[index] : filterRegStudents(RegStudent, regStudents)[index];
+        const sheetData = {
+          name: student.name,
+          gender: student.gender,
+          place: student.place,
+          school: student.school,
+          class: student.class,
+          phoneNumber: student.phoneNumber,
+          parentsNumber: student.parentsNumber,
+          zone: student.zone,
+          checked: false, // Set checked status to false when not checked in
+        };
+
+        // Make a POST request to update Google Sheets
+        try {
+          await fetch('https://script.google.com/macros/s/AKfycbzXspfj1-Ixhm8RW6va0tU_0uCbUMAw0TNgG3Y7WKKP19unOhnOpnmuAEKrdEC6gYU/exec', {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(sheetData),
+          });
+          alert("Student CheckedOut successfully in Google Sheets");
+        } catch (error) {
+          console.error(error);
+          alert('Error updating Google Sheets. Please retry.');
+        }
       } catch (error) {
-        alert('Error updating Google Sheets. Please retry.');
         console.error(error);
       }
     }
@@ -191,10 +214,18 @@ function RegList() {
 
   return (
     <>
-      <div className='h-screen bg-gradient-to-bl from-cyan-400 to-pink-600'>
-
-        <div className='pt-5'>
-          <FormControl required sx={{ m: 1, minWidth: '95%' }} size="small">
+      <div className='h-screen bg-gradient-to-bl from-cyan-400 to-pink-600 md:flex md:my-auto overflow-y-auto pb-[25%] py-[5%] md:py-20 md:pb-[10%]'>
+        <div className='w-full md:w-6/12 flex items-center justify-center flex-col md:p-5 md:border-r-2'>
+          <FormControl required
+            sx={{
+              m: 1,
+              width: '90%',
+              [`@media (min-width: ${theme.breakpoints.values.md}px)`]: {
+                width: '80%',
+              },
+              marginBottom: '20px',
+            }}
+            size="small">
             <InputLabel sx={{ color: 'white' }} id="zonelabel">Zone</InputLabel>
             <Select
               labelId="zonelabel"
@@ -233,28 +264,33 @@ function RegList() {
               <MenuItem value={"Moothedam"}>Moothedam</MenuItem>
             </Select>
           </FormControl>
+
+
+          <Search className='mx-auto'>
+            <SearchIconWrapper>
+              <SearchIcon />
+            </SearchIconWrapper>
+            <StyledInputBase
+              placeholder="Search"
+              inputProps={{ 'aria-label': 'search' }}
+              onChange={(e) => setRegStudent(e.target.value)}
+            />
+          </Search>
+
+          <div className='flex items-center justify-between w-11/12 mx-auto mt-3 text-xs'>
+            <h1 className='rounded-lg mx-auto w-5/12 '
+              style={{ backgroundImage: 'url(images/countbg.png)', backgroundSize: 'cover', backgroundPosition: 'center', padding: '20px' }}>Total Registration <br /><p className='text-center text-xl text-white font-bold shadow-lg rounded-sm'>{totalRegCount}</p> </h1>
+            <h1 className='rounded-lg mx-auto w-5/12'
+              style={{ backgroundImage: 'url(images/countbg.png)', backgroundSize: 'cover', backgroundPosition: 'center', padding: '20px' }}><strong>{zone ? zone : 'Zone'}</strong> Registration <br /> <p className='text-center text-xl text-white font-bold shadow-lg rounded-sm'>{zonRegCount}</p> </h1>
+          </div>
+
         </div>
 
-        <Search className='mx-auto'>
-          <SearchIconWrapper>
-            <SearchIcon />
-          </SearchIconWrapper>
-          <StyledInputBase
-            placeholder="Search"
-            inputProps={{ 'aria-label': 'search' }}
-            onChange={(e) => setRegStudent(e.target.value)}
-          />
-        </Search>
-
-        <div className='flex items-center justify-between w-11/12 mx-auto mt-3 text-xs'>
-          <h1 className='rounded-lg mx-auto w-5/12 '
-            style={{ backgroundImage: 'url(/countbg.png)', backgroundSize: 'cover', backgroundPosition: 'center', padding: '20px' }}>Total Registration <br /><p className='text-center text-xl text-white font-bold shadow-lg rounded-sm'>{totalRegCount}</p> </h1>
-          <h1 className='rounded-lg mx-auto w-5/12'
-            style={{ backgroundImage: 'url(/countbg.png)', backgroundSize: 'cover', backgroundPosition: 'center', padding: '20px' }}><strong>{zone ? zone : 'Zone'}</strong> Registration <br /> <p className='text-center text-xl text-white font-bold shadow-lg rounded-sm'>{zonRegCount}</p> </h1>
-        </div>
-
-        <div className='flex pt-5'>
-          <TableContainer component={Paper} className='mx-2 max-h-[400px] overflow-y-auto'>
+        <div className='w-full md:w-6/12 flex pt-5 my-auto md:p-10'>
+          <TableContainer
+            component={Paper}
+            className='mx-2 max-h-[400px] md:max-h-[600px] overflow-y-auto'
+          >
             <Table size="small" aria-label="registered students">
 
               <TableHead>
