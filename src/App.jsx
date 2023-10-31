@@ -39,7 +39,7 @@ function App() {
     fetch('https://script.google.com/macros/s/AKfycbzXspfj1-Ixhm8RW6va0tU_0uCbUMAw0TNgG3Y7WKKP19unOhnOpnmuAEKrdEC6gYU/exec')
     .then(response => response.json())
     .then(data => {
-      console.log(data);
+      // console.log(data);
       setRegStudents(data);
     })
     .catch(error => console.error('Error:', error));
