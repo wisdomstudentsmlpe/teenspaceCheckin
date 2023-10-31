@@ -9,6 +9,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -31,7 +32,7 @@ const Search = styled('div')(({ theme }) => ({
   },
   width: '90%',
   [theme.breakpoints.up('sm')]: {
-    marginLeft: '0%',
+    marginLeft: 'auto',
     width: '90%',
   },
   [theme.breakpoints.up('md')]: {
@@ -59,9 +60,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     transition: theme.transitions.create('width'),
     width: '100%',
     [theme.breakpoints.up('sm')]: {
-      width: '12ch',
+      width: '100%',
       '&:focus': {
-        width: '20ch',
+        width: '100%',
       },
     },
   },
@@ -111,25 +112,22 @@ function RegList() {
       return regStudents.filter((student) => student.name.toLowerCase().includes(query.toLowerCase()));
     }
   }
-
   //----------------------------------------------
-  const [checkedList, setCheckedList] = useState(regStudents.map(student => ({ id: student.studentId, checked: !!student.checked })));
+
+
+
 
   const handleCheckin = async (event, studentId, index) => {
-    const newCheckedList = [...checkedList];
-    newCheckedList[index] = event.target.checked;
-    setCheckedList(newCheckedList);
-    console.log(newCheckedList);
 
-    fetch('https://script.google.com/macros/s/AKfycbzXspfj1-Ixhm8RW6va0tU_0uCbUMAw0TNgG3Y7WKKP19unOhnOpnmuAEKrdEC6gYU/exec')
-    .then(response => response.json())
-    .then(data => {
-      console.log(data);
-      setRegStudents(data);
-    })
-    .catch(error => console.error('Error:', error));
+    const updatedRegStudents = [...regStudents]; // Create a copy of the current list
+    updatedRegStudents[index].checked = event.target.checked;
+    setRegStudents(updatedRegStudents);
 
-    if (newCheckedList[index]) {
+    // Set a loading indicator for the specific student
+    updatedRegStudents[index].loading = true;
+    setRegStudents(updatedRegStudents);
+
+    if (event.target.checked) {
       try {
         // await firebase.firestore().collection('test').doc(studentId).update({
         //   checked: true
@@ -161,20 +159,20 @@ function RegList() {
             },
             body: JSON.stringify(sheetData),
           });
-          alert("Student CheckedIn successfully in Google Sheets");
+
         } catch (error) {
-          console.error(error);
-          alert('Error updating Google Sheets. Please retry.');
+          updatedRegStudents[index].checked = !event.target.checked;
+          setRegStudents(updatedRegStudents);
         }
       } catch (error) {
         console.error(error);
       }
     } else {
       try {
-        await firebase.firestore().collection('test').doc(studentId).update({
-          checked: false
-        });
-        alert("Student CheckedOut successfully in Firebase");
+        // await firebase.firestore().collection('test').doc(studentId).update({
+        //   checked: false
+        // });
+        // alert("Student CheckedOut successfully in Firebase");
 
         const student = zone ? filterZoneRegStudent(RegStudent, zoneRegList)[index] : filterRegStudents(RegStudent, regStudents)[index];
         const sheetData = {
@@ -199,15 +197,24 @@ function RegList() {
             },
             body: JSON.stringify(sheetData),
           });
-          alert("Student CheckedOut successfully in Google Sheets");
+
         } catch (error) {
-          console.error(error);
-          alert('Error updating Google Sheets. Please retry.');
+          updatedRegStudents[index].checked = !event.target.checked;
+          setRegStudents(updatedRegStudents);
         }
       } catch (error) {
         console.error(error);
       }
     }
+
+    fetch('https://script.google.com/macros/s/AKfycbzXspfj1-Ixhm8RW6va0tU_0uCbUMAw0TNgG3Y7WKKP19unOhnOpnmuAEKrdEC6gYU/exec')
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        setRegStudents(data);
+      })
+      .catch(error => console.error('Error:', error));
+
   };
 
 
@@ -300,42 +307,51 @@ function RegList() {
                 </TableRow>
               </TableHead>
 
-              {zone ? <TableBody>
-                {filterZoneRegStudent(RegStudent, zoneRegList).map((student, index) => (
-                  <TableRow
-                    key={student.id}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">{student.name}<br />{student.parentsNumber} <br /> {student.phoneNumber}</TableCell>
-                    <TableCell align="right">
-                      <Checkbox
-                        color="success"
-                        checked={checkedList[index]}
-                        onChange={(event) => handleCheckin(event, student.id, index)}
-                        inputProps={{ 'aria-label': 'controlled' }}
-                      />
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody> :
-                <TableBody>
-                  {filterRegStudents(RegStudent, regStudents).map((student, index) => (
+              <TableBody>
+                {zone ? (
+                  filterZoneRegStudent(RegStudent, zoneRegList).map((student, index) => (
+                    <TableRow
+                      key={student.id}
+                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    >
+                      <TableCell component="th" scope="row">{student.name}<br />{student.parentsNumber} <br /> {student.phoneNumber}</TableCell>
+                      <TableCell align="right">
+                        {student.loading ? ( // Check if the student is in a loading state
+                          <CircularProgress size={24} color="secondary" />
+                        ) : (
+                          <Checkbox
+                            color="success"
+                            checked={student.checked}
+                            onChange={(event) => handleCheckin(event, student.id, index)}
+                            inputProps={{ 'aria-label': 'controlled' }}
+                          />
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  filterRegStudents(RegStudent, regStudents).map((student, index) => (
                     <TableRow
                       key={`${student.id}-${index}`}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
-                      <TableCell component="th" scope="row">{student.name}<br />{student.parentsNumber} <br />{student.phoneNumber}</TableCell>
+                      <TableCell component="th" scope="row">{student.name}<br />{student.parentsNumber} <br /> {student.phoneNumber}</TableCell>
                       <TableCell align="right">
-                        <Checkbox
-                          color="success"
-                          checked={checkedList[index]}
-                          onChange={(event) => handleCheckin(event, student.id, index)}
-                          inputProps={{ 'aria-label': 'controlled' }}
-                        />
+                        {student.loading ? ( // Check if the student is in a loading state
+                          <CircularProgress size={24} color="secondary" />
+                        ) : (
+                          <Checkbox
+                            color="success"
+                            checked={student.checked}
+                            onChange={(event) => handleCheckin(event, student.id, index)}
+                            inputProps={{ 'aria-label': 'controlled' }}
+                          />
+                        )}
                       </TableCell>
                     </TableRow>
-                  ))}
-                </TableBody>}
+                  ))
+                )}
+              </TableBody>
 
             </Table>
           </TableContainer>

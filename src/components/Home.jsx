@@ -29,7 +29,7 @@ function Home() {
 
     return (
         <>
-            <div className='custom-bg-image h-screen sm:h-auto md:h-screen flex items-center bg-gradient-to-bl from-cyan-400 to-pink-600 pb-[25%] md:pb-[0%] sm:pt-3'>
+            <div className='custom-bg-image h-screen flex items-center bg-gradient-to-bl from-cyan-400 to-pink-600 pb-[25%] md:pb-[0%] sm:pt-3'>
                 <div className='md:flex'>
                     <div className='w-full md:w-6/12 md:border-r-2'>
                         <div className='flex sm:w-6/12 mx-auto mb-5 sm:mb-5 justify-center bg-slate-50 bg-opacity-50 py-5'>
