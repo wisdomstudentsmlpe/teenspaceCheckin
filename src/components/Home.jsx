@@ -33,7 +33,7 @@ function Home() {
                 <div className='md:flex'>
                     <div className='w-full md:w-6/12 md:border-r-2'>
                         <div className='flex sm:w-6/12 mx-auto mb-5 sm:mb-5 justify-center bg-slate-50 bg-opacity-50 py-5'>
-                            <img className='w-5/12 border-r pr-4' src="images/students_logo.png" alt="" />
+                            <img className='w-5/12 border-r pr-4' src="images/students-logo.png" alt="" />
                             <img className='w-4/12 ' src="images/girls-logo.png" alt="" />
                         </div>
                         <img className='w-8/12 sm:w-5/12 mx-auto my-10' src="images/logo.png" alt="" />
