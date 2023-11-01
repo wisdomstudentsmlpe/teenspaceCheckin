@@ -93,12 +93,12 @@ function RegisterForm() {
     };
 
     return (
-        <div className='px-3 bg-gradient-to-bl from-cyan-400 to-pink-600 py-[5%]'>
+        <div className='px-3 bg-gradient-to-bl from-cyan-400 to-pink-600 py-[5%] sm:pb-[15%]'>
 
-            <div className='md:w-6/12 md:pt-20'>
+            <div className='md:w-6/12 mx-auto '>
 
                 <div>
-                    <h1 className='text-[25px] font-bold font-serif text-center py-1 px-14 md:w-[400px] md:h-[100px] md:mx-auto text-blue-900'
+                    <h1 className='text-[25px] font-bold font-serif md:text-6xl text-center py-1 sm:mb-2 px-14 md:w-[500px] md:h-[100px] md:mx-auto text-white'
                         style={{ backgroundImage: 'url(/regbg.png)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundPositionX: '30px' }}>
                         Secure Your Spot!</h1>
                 </div>
