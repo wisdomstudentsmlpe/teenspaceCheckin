@@ -37,12 +37,12 @@ function App() {
     // });
 
     fetch('https://script.google.com/macros/s/AKfycbzXspfj1-Ixhm8RW6va0tU_0uCbUMAw0TNgG3Y7WKKP19unOhnOpnmuAEKrdEC6gYU/exec')
-    .then(response => response.json())
-    .then(data => {
-      // console.log(data);
-      setRegStudents(data);
-    })
-    .catch(error => console.error('Error:', error));
+      .then(response => response.json())
+      .then(data => {
+        // console.log(data);
+        setRegStudents(data);
+      })
+      .catch(error => console.error('Error:', error));
 
   }, [])
 
@@ -50,11 +50,11 @@ function App() {
     <>
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/regForm" element={<RegisterForm />} />
         {user && <>
           <Route path="/regList" element={<RegListPage />} />
-          <Route path="/regForm" element={<RegisterForm />} />
+          <Route path="/checkInList" element={<CheckinPage />} />
         </>}
-        <Route path="/checkInList" element={<CheckinPage />} />
         {user ? <Route path="/admin" element={<RegListPage />} /> : <Route path="/admin" element={<LoginPage />} />}
       </Routes>
       <Footer />
