@@ -19,6 +19,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
 import Checkbox from '@mui/material/Checkbox';
 import { useTheme } from '@mui/material/styles';
+import StudentDataView from './StudentDataView';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -72,6 +73,19 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 
 function RegList() {
+
+  const [open, setOpen] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState([]);
+
+  const handleOpen = (student) => {
+    setSelectedStudent(student);
+    setOpen(true);
+    console.log(selectedStudent);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const { setRegStudents } = useContext(RegStudentsContext)
 
@@ -314,7 +328,13 @@ function RegList() {
                       key={student.id}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
-                      <TableCell component="th" scope="row">{student.name}<br />{student.parentsNumber} <br /> {student.phoneNumber}</TableCell>
+                      <TableCell
+                        onClick={() => handleOpen(student)}
+                        component="th"
+                        scope="row">{student.name}<br />
+                        {student.parentsNumber} <br />
+                        {student.phoneNumber}
+                      </TableCell>
                       <TableCell align="right">
                         {student.loading ? ( // Check if the student is in a loading state
                           <CircularProgress size={24} color="secondary" />
@@ -335,7 +355,13 @@ function RegList() {
                       key={`${student.id}-${index}`}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
-                      <TableCell component="th" scope="row">{student.name}<br />{student.parentsNumber} <br /> {student.phoneNumber}</TableCell>
+                      <TableCell
+                        onClick={() => handleOpen(student)}
+                        component="th"
+                        scope="row">{student.name}<br />
+                        {student.parentsNumber} <br />
+                        {student.phoneNumber}
+                      </TableCell>
                       <TableCell align="right">
                         {student.loading ? ( // Check if the student is in a loading state
                           <CircularProgress size={24} color="secondary" />
@@ -357,6 +383,8 @@ function RegList() {
           </TableContainer>
         </div>
       </div>
+
+      <StudentDataView open={open} onClose={handleClose} studentDetails={selectedStudent} />
     </>
   )
 }
